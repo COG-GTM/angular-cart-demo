@@ -1,0 +1,41 @@
+# https://docs.devin.ai/onboard-devin/environment-yaml
+# Run from the repo root. 2015-era app (engines.node ^4.2.3); we run the Express
+# server on Node 4.9.1 directly rather than via the (broken-on-modern) grunt build.
+initialize: |
+  export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"
+  nvm install 4.9.1 >/dev/null   # server runtime (matches engines)
+  nvm install 20 >/dev/null      # front-end tooling
+  docker pull mongo:4.4 >/dev/null || true
+  nvm use 4.9.1 >/dev/null
+  npm install --production --no-optional --no-audit --no-fund
+  npm install --no-save --no-optional --no-audit --no-fund babel-core@5.8.38 lusca@1.4.1 debug@2.6.9 connect-livereload@0.6.1
+  rm -rf node_modules/connect-mongo/node_modules/debug
+  nvm use 20 >/dev/null
+  npm list -g bower >/dev/null 2>&1 || npm install -g bower
+  bower install --config.interactive=false
+  bower install font-awesome#4.7.0 --config.interactive=false --force-latest
+  mkdir -p "$HOME/acdemo-tools"
+  (cd "$HOME/acdemo-tools" && (npm init -y >/dev/null 2>&1 || true) && npm install --no-audit --no-fund sass @babel/core@7 @babel/cli@7 @babel/preset-env@7)
+  mkdir -p .tmp/app
+  "$HOME/acdemo-tools/node_modules/.bin/sass" --no-source-map --quiet --load-path=client client/app/app.scss .tmp/app/app.css
+  rm -rf .tmp/components
+  "$HOME/acdemo-tools/node_modules/.bin/babel" client/app --out-dir .tmp/app --presets @babel/preset-env --ignore "**/*.spec.js" >/dev/null
+  "$HOME/acdemo-tools/node_modules/.bin/babel" client/components --out-dir .tmp/components --presets @babel/preset-env --ignore "**/*.spec.js,**/*.mock.js" >/dev/null
+maintenance: |
+  export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 4.9.1 >/dev/null
+  npm install --production --no-optional --no-audit --no-fund
+knowledge:
+  - name: startup
+    contents: |
+      docker start acdemo-mongo 2>/dev/null || docker run -d --name acdemo-mongo -p 27017:27017 mongo:4.4
+      export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 4.9.1
+      NODE_ENV=development PORT=9000 node server   # seeds sample products on boot; app at http://localhost:9000
+  - name: client-rebuild
+    contents: |
+      "$HOME/acdemo-tools/node_modules/.bin/sass" --no-source-map --quiet --load-path=client client/app/app.scss .tmp/app/app.css
+      "$HOME/acdemo-tools/node_modules/.bin/babel" client/app --out-dir .tmp/app --presets @babel/preset-env --ignore "**/*.spec.js"
+      "$HOME/acdemo-tools/node_modules/.bin/babel" client/components --out-dir .tmp/components --presets @babel/preset-env --ignore "**/*.spec.js,**/*.mock.js"
+  - name: notes
+    contents: |
+      # The original grunt/npm test toolchain does not install on modern machines
+      # (npm@2 npm: aliases, Python2 native builds). Use the startup flow above.
