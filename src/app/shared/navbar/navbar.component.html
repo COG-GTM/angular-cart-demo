@@ -1,0 +1,31 @@
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button
+        class="navbar-toggle"
+        type="button"
+        [attr.aria-expanded]="!isCollapsed"
+        aria-controls="navbar-main"
+        (click)="toggleCollapsed()"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a routerLink="/" class="navbar-brand">angular-clothes-shop</a>
+    </div>
+    <div id="navbar-main" class="navbar-collapse collapse" [ngbCollapse]="isCollapsed">
+      <ul class="nav navbar-nav">
+        @for (item of menu; track item.link) {
+          <li
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+          >
+            <a [routerLink]="item.link">{{ item.title }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
