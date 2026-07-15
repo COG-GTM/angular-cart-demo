@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row">
+    <form class="navbar-form navbar-left" role="search" (ngSubmit)="$event.preventDefault()">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search"
+          name="search-text"
+          id="search-text"
+          [(ngModel)]="searchText"
+        />
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    @for (product of visibleProducts; track product._id) {
+      <div
+        class="col-xs-12 col-sm-6 col-md-4 product-box"
+        [class.outOfStock]="product.quantity === 0"
+      >
+        <div class="product-holder">
+          <a [routerLink]="['/products', product._id]">
+            <img
+              class="front-icon"
+              [src]="product.images[0]"
+              [title]="product.description"
+            />
+            <!-- Product info: name and price -->
+            <div class="product-details links row">
+              <div class="col-xs-7 col-md-5">
+                <p id="product-name" class="pull-left">{{ product.name }}</p>
+              </div>
+              <div class="col-xs-3 col-md-3">
+                <p id="product-price" class="pull-right">
+                  {{ product.price | currency: 'GBP' : '£' }}
+                </p>
+              </div>
+              <div class="col-xs-3 col-md-3">
+                <p id="add-button" class="button-box pull-right">
+                  @if (productInCart(product)) {
+                    <button
+                      class="btn btn-success ng-click-active"
+                      type="button"
+                      [disabled]="product.quantity === 0"
+                      (click)="addToCart(product)"
+                    >
+                      Add
+                    </button>
+                  } @else {
+                    <button
+                      class="btn btn-warning ng-click-active"
+                      type="button"
+                      [disabled]="product.quantity === 0"
+                      (click)="addToCart(product)"
+                    >
+                      Add
+                    </button>
+                  }
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- end product-holder -->
+      </div>
+      <!-- end col -->
+    }
+  </div>
+  <!-- end row -->
+</div>

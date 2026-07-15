@@ -1,8 +1,14 @@
 node_modules
-public
+dist
+.angular
+.git
 .tmp
 .sass-cache
 .idea
-client/bower_components
-/server/config/local.env.js
+coverage
+out-tsc
+e2e
+test-results
+playwright-report
 npm-debug.log
+/server/config/local.env.js

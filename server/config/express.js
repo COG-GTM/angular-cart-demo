@@ -64,22 +64,21 @@ export default function(app) {
     }));
   }
 
-  app.set('appPath', path.join(config.root, 'client'));
+  // The Angular 19 CLI builds the client into dist/client/browser.
+  app.set('appPath', path.join(config.root, 'dist', 'client', 'browser'));
 
   if ('production' === env) {
-    app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
-    app.use(express.static(app.get('appPath')));
-    app.use(morgan('dev'));
+    app.use(favicon(path.join(app.get('appPath'), 'favicon.ico')));
   }
 
   if ('development' === env) {
     app.use(require('connect-livereload')());
   }
 
+  app.use(express.static(app.get('appPath')));
+  app.use(morgan('dev'));
+
   if ('development' === env || 'test' === env) {
-    app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(app.get('appPath')));
-    app.use(morgan('dev'));
     app.use(errorHandler()); // Error handler - has to be last
   }
 }

@@ -1,0 +1,34 @@
+// Bootstrap 3 contextual colors (ported from the AngularJS $brand-* variables
+// that modal.scss originally referenced).
+$brand-primary: #337ab7;
+$brand-info: #5bc0de;
+$brand-success: #5cb85c;
+$brand-warning: #f0ad4e;
+$brand-danger: #d9534f;
+
+.modal-primary,
+.modal-info,
+.modal-success,
+.modal-warning,
+.modal-danger {
+  .modal-header {
+    color: #fff;
+    border-radius: 5px 5px 0 0;
+  }
+}
+
+.modal-primary .modal-header {
+  background: $brand-primary;
+}
+.modal-info .modal-header {
+  background: $brand-info;
+}
+.modal-success .modal-header {
+  background: $brand-success;
+}
+.modal-warning .modal-header {
+  background: $brand-warning;
+}
+.modal-danger .modal-header {
+  background: $brand-danger;
+}
