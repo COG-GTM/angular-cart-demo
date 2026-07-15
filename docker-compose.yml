@@ -1,13 +1,17 @@
-web:
-  build: .
-  ports:
-    - "80:8080"
-  environment:
-    NODE_ENV: production
-    seedDB: 'yes'
-  links:
-    - mongo
-mongo:
-  image: mongo
-  ports:
-    - "27017:27017"
+services:
+  web:
+    build: .
+    ports:
+      - "80:8080"
+    environment:
+      NODE_ENV: production
+      seedDB: "yes"
+      # Wire the server (server/config/environment/production.js) to the mongo service.
+      MONGO_PORT_27017_TCP_ADDR: mongo
+      MONGO_PORT_27017_TCP_PORT: "27017"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"

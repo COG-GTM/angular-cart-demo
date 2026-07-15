@@ -1,19 +1,31 @@
-FROM mhart/alpine-node:4.2.4
+# --- Build stage: compile the Angular 19 client into dist/client/browser ---
+FROM node:20-alpine AS build
 
-MAINTAINER Capgemini
+WORKDIR /app
 
-WORKDIR /src
+COPY package*.json ./
+RUN npm ci
 
-RUN apk add --update make gcc g++ python
+COPY . .
+RUN npm run build
 
-COPY dist .
+# --- Runtime stage: Express server serving the built client ---
+FROM node:20-alpine
 
-ENV NODE_ENV production
+LABEL maintainer="Capgemini"
 
-RUN npm install
+WORKDIR /app
 
-RUN apk del make gcc g++ python && \
-  rm -rf /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY server ./server
+COPY --from=build /app/dist ./dist
 
 EXPOSE 8080
-CMD ["npm", "start"]
+
+# The server sources use ES module syntax transpiled on the fly by babel,
+# so register the hook explicitly for the production runtime.
+CMD ["node", "-r", "babel-core/register", "server/app.js"]
