@@ -1,0 +1,33 @@
+<div class="container">
+  @if (items().length < 1) {
+    <div>Your cart is currently empty..</div>
+  } @else {
+    <div class="cart-products-box">
+      <table class="cart-table">
+        <tr>
+          <th width="25%">Product</th>
+          <th width="25%">Quantity</th>
+          <th width="25%">Price</th>
+          <th width="25%">Action</th>
+        </tr>
+        @for (item of items(); track item._id) {
+          <tr>
+            <td>
+              <a class="links" routerLink="/">{{ item.name }}</a>
+            </td>
+            <td class="cart-table-qty">{{ item.quantity }}</td>
+            <td>{{ item.price | currency:'GBP':'£' }}</td>
+            <td>
+              <button (click)="removeFromCart(item)" class="btn btn-primary">
+                Remove from cart
+              </button>
+            </td>
+          </tr>
+        }
+      </table>
+      <div id="totalPrice" class="orange">
+        <b>Total: {{ totalCartPrice() | currency:'GBP':'£' }}</b>
+      </div>
+    </div>
+  }
+</div>
