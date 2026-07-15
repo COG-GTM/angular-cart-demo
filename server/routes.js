@@ -11,7 +11,7 @@ export default function(app) {
   // Insert routes below
   app.use('/api/products', require('./api/product'));
   // All undefined asset or api routes should return a 404
-  app.route('/:url(api|auth|components|app|bower_components|assets)/*')
+  app.route('/:url(api|auth)/*')
    .get(errors[404]);
 
   // All other routes should redirect to the index.html

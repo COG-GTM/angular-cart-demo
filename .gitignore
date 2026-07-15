@@ -1,11 +1,11 @@
 node_modules
-public
 .tmp
 .sass-cache
 .idea
+.angular
 client/bower_components
 dist
+out-tsc
 coverage
 /server/config/local.env.js
-client/app/app.constant.js
 npm-debug.log
