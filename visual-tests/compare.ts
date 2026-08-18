@@ -50,13 +50,18 @@ async function compareOne(name: string): Promise<Result> {
 async function main(): Promise<void> {
   await mkdir(DIFF_DIR, { recursive: true });
   const names = (await readdir(SOURCE_DIR)).filter(file => file.endsWith('.png')).sort();
-  const reactNames = new Set(await readdir(REACT_DIR));
+  const reactNames = new Set((await readdir(REACT_DIR)).filter(file => file.endsWith('.png')));
+
+  const missing = names.filter(name => !reactNames.has(name));
+  const extra = [...reactNames].filter(name => !names.includes(name)).sort();
+  if (missing.length > 0 || extra.length > 0) {
+    throw new Error(
+      `screenshot sets differ — missing react: [${missing.join(', ')}], missing source: [${extra.join(', ')}]`
+    );
+  }
 
   const results: Result[] = [];
   for (const name of names) {
-    if (!reactNames.has(name)) {
-      throw new Error(`missing react screenshot for ${name}`);
-    }
     results.push(await compareOne(name));
   }
 
