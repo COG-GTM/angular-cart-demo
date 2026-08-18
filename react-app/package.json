@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "npm run sync:fonts && vite",
+    "build": "npm run sync:fonts && tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "npm run sync:fonts && vite preview",
+    "sync:fonts": "node scripts/sync-fonts.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

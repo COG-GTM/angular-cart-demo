@@ -25,3 +25,4 @@ dist-ssr
 
 # The repo-root .gitignore excludes any "public" dir; this app needs its static assets tracked.
 !/public
+public/fonts
