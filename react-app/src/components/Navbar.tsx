@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const MENU = [
   { title: 'Products', to: '/' },
@@ -8,6 +8,7 @@ const MENU = [
 
 export function Navbar() {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const { pathname } = useLocation();
 
   return (
     <div className="navbar navbar-default navbar-static-top">
@@ -28,10 +29,8 @@ export function Navbar() {
         <div className={`navbar-collapse collapse${isCollapsed ? '' : ' in'}`} id="navbar-main">
           <ul className="nav navbar-nav">
             {MENU.map(item => (
-              <li key={item.to} className={undefined}>
-                <NavLink to={item.to} end className={({ isActive }) => (isActive ? 'active' : '')}>
-                  {item.title}
-                </NavLink>
+              <li key={item.to} className={pathname === item.to ? 'active' : undefined}>
+                <Link to={item.to}>{item.title}</Link>
               </li>
             ))}
           </ul>

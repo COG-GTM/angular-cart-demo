@@ -1,4 +1,8 @@
-/** Replicates AngularJS `{{ value | currency:"\u00a3" }}`. */
+/** Replicates AngularJS `{{ value | currency:"\u00a3" }}`, including group separators. */
 export function currency(value: number, symbol = '\u00a3'): string {
-  return `${symbol}${value.toFixed(2)}`;
+  const amount = value.toLocaleString('en-GB', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${symbol}${amount}`;
 }
