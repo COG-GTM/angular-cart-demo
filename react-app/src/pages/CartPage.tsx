@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useCart } from '../cart/useCart';
 import { currency } from '../utils/currency';
 import { Navbar } from '../components/Navbar';
@@ -26,7 +27,7 @@ export function CartPage() {
               {cart.items.map(item => (
                 <tr key={item._id}>
                   <td>
-                    <a className="links" href={`/#/products/${item._id}`}>{item.name}</a>
+                    <Link className="links" to={`/#/products/${item._id}`}>{item.name}</Link>
                   </td>
                   <td className="cart-table-qty">{item.quantity}</td>
                   <td>{currency(item.price)}</td>
