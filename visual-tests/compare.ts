@@ -1,10 +1,14 @@
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
 import { SCREENSHOT_ROOT } from './capture';
 
-const THRESHOLD_PCT = Number(process.env.MISMATCH_THRESHOLD ?? '2');
+const configuredThreshold = Number(process.env.MISMATCH_THRESHOLD ?? '2');
+if (!Number.isFinite(configuredThreshold)) {
+  throw new Error(`MISMATCH_THRESHOLD must be a number, got "${process.env.MISMATCH_THRESHOLD}"`);
+}
+const THRESHOLD_PCT = configuredThreshold;
 const SOURCE_DIR = path.join(SCREENSHOT_ROOT, 'source');
 const REACT_DIR = path.join(SCREENSHOT_ROOT, 'react');
 const DIFF_DIR = path.join(SCREENSHOT_ROOT, 'diff');
@@ -48,6 +52,7 @@ async function compareOne(name: string): Promise<Result> {
 }
 
 async function main(): Promise<void> {
+  await rm(DIFF_DIR, { recursive: true, force: true });
   await mkdir(DIFF_DIR, { recursive: true });
   const names = (await readdir(SOURCE_DIR)).filter(file => file.endsWith('.png')).sort();
   const reactNames = new Set((await readdir(REACT_DIR)).filter(file => file.endsWith('.png')));
@@ -67,7 +72,7 @@ async function main(): Promise<void> {
 
   let failures = 0;
   for (const result of results) {
-    const passed = result.mismatchPct < THRESHOLD_PCT;
+    const passed = result.mismatchPct < THRESHOLD_PCT && result.note === undefined;
     if (!passed) {
       failures += 1;
     }

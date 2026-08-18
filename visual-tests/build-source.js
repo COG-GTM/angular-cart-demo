@@ -23,11 +23,7 @@ function walk(dir, files = []) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       walk(full, files);
-    } else if (
-      entry.name.endsWith('.js') &&
-      !entry.name.endsWith('.spec.js') &&
-      !entry.name.endsWith('.mock.js')
-    ) {
+    } else if (entry.name.endsWith('.js') && !entry.name.endsWith('.spec.js')) {
       files.push(full);
     }
   }
