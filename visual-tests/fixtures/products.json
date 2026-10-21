@@ -1,0 +1,66 @@
+[
+  {
+    "_id": "000000000000000000000001",
+    "name": "Cream dress",
+    "description": "Semi-sheer woven cream tie smock dress",
+    "price": 30,
+    "images": ["assets/images/cream-dress.jpg"],
+    "quantity": 4
+  },
+  {
+    "_id": "000000000000000000000002",
+    "name": "Kimono Jacket",
+    "description": "Denim kimono jacket with open front design",
+    "price": 55,
+    "images": ["assets/images/kimono-jacket.jpg"],
+    "quantity": 10
+  },
+  {
+    "_id": "000000000000000000000003",
+    "name": "Gold dress",
+    "description": "Textured dress with military gold button detail",
+    "price": 66,
+    "images": ["assets/images/gold-dress.jpg"],
+    "quantity": 8
+  },
+  {
+    "_id": "000000000000000000000004",
+    "name": "Split front T-Shirt",
+    "description": "Cotton jersey crew neckline T shirt",
+    "price": 30,
+    "images": ["assets/images/white-t-shirt.jpg"],
+    "quantity": 5
+  },
+  {
+    "_id": "000000000000000000000005",
+    "name": "Green Sweatshirt",
+    "description": "Loop-back sweatshirt with embroidery in washed green",
+    "price": 65,
+    "images": ["assets/images/green-sweatshirt.jpg"],
+    "quantity": 2
+  },
+  {
+    "_id": "000000000000000000000006",
+    "name": "Knitted Cape",
+    "description": "Chunky Knitted cape in black rib",
+    "price": 60,
+    "images": ["assets/images/black-cape.jpg"],
+    "quantity": 7
+  },
+  {
+    "_id": "000000000000000000000007",
+    "name": "Vintage Tie",
+    "description": "Reclaimed vintage floral bow tie",
+    "price": 23,
+    "images": ["assets/images/vintage-tie.jpg"],
+    "quantity": 8
+  },
+  {
+    "_id": "000000000000000000000008",
+    "name": "Blue cap",
+    "description": "Snapback cap with crocodile effect and contrast peak",
+    "price": 20,
+    "images": ["assets/images/blue-cap.jpg"],
+    "quantity": 0
+  }
+]

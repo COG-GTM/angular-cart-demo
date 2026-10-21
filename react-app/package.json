@@ -1,0 +1,30 @@
+{
+  "name": "react-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run sync:fonts && vite",
+    "build": "npm run sync:fonts && tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "npm run sync:fonts && vite preview",
+    "sync:fonts": "node scripts/sync-fonts.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.0.4",
+    "bootstrap-sass": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "oxlint": "^1.75.0",
+    "sass": "^1.102.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  }
+}
