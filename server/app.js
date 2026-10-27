@@ -39,6 +39,14 @@ var socketio = require('socket.io')(server, {
   path: '/socket.io-client'
 });
 require('./config/socketio')(socketio);
+
+// Registered before the session middleware so probes neither create sessions
+// nor wait on the session store.
+app.get('/healthz', (req, res) => {
+  var dbUp = mongoose.connection.readyState === 1;
+  res.status(dbUp ? 200 : 503).json({status: dbUp ? 'ok' : 'db-unavailable'});
+});
+
 require('./config/express')(app);
 require('./routes')(app);
 

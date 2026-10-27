@@ -6,15 +6,9 @@
 
 import errors from './components/errors';
 import path from 'path';
-import mongoose from 'mongoose';
 
 export default function(app) {
   var indexHtml = path.join(app.get('appPath'), 'index.html');
-
-  app.get('/healthz', (req, res) => {
-    var dbUp = mongoose.connection.readyState === 1;
-    res.status(dbUp ? 200 : 503).json({status: dbUp ? 'ok' : 'db-unavailable'});
-  });
 
   // Insert routes below
   app.use('/api/products', require('./api/product'));

@@ -11,4 +11,6 @@ var ProductSchema = new mongoose.Schema({
   active: Boolean
 });
 
+require('./product.events').registerHooks(ProductSchema);
+
 export default mongoose.model('Product', ProductSchema);
