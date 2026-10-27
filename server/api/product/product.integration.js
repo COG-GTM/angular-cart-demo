@@ -157,7 +157,7 @@ describe('Product API:', function() {
   });
 
   describe('GET /bleh', function() {
-    it('should respond with index.html', function() {
+    it('should respond with index.html', function(done) {
       request(app)
         .get('/bleh')
         .expect(200)

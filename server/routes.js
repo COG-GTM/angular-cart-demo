@@ -6,8 +6,16 @@
 
 import errors from './components/errors';
 import path from 'path';
+import mongoose from 'mongoose';
 
 export default function(app) {
+  var indexHtml = path.join(app.get('appPath'), 'index.html');
+
+  app.get('/healthz', (req, res) => {
+    var dbUp = mongoose.connection.readyState === 1;
+    res.status(dbUp ? 200 : 503).json({status: dbUp ? 'ok' : 'db-unavailable'});
+  });
+
   // Insert routes below
   app.use('/api/products', require('./api/product'));
   // All undefined asset or api routes should return a 404
@@ -17,6 +25,6 @@ export default function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get((req, res) => {
-      res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
+      res.sendFile(indexHtml);
     });
 }

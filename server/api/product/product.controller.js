@@ -41,17 +41,14 @@ function handleEntityNotFound(res) {
 function saveUpdates(updates) {
   return function(entity) {
     var updated = _.merge(entity, updates);
-    return updated.saveAsync()
-      .spread(updated => {
-        return updated;
-      });
+    return updated.save();
   };
 }
 
 function removeEntity(res) {
   return function(entity) {
     if (entity) {
-      return entity.removeAsync()
+      return entity.deleteOne()
         .then(() => {
           res.status(204).end();
         });
@@ -61,14 +58,14 @@ function removeEntity(res) {
 
 // Gets a list of Products
 export function index(req, res) {
-  Product.findAsync()
+  Product.find().exec()
     .then(responseWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Product from the DB
 export function show(req, res) {
-  Product.findByIdAsync(req.params.id)
+  Product.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(responseWithResult(res))
     .catch(handleError(res));
@@ -76,7 +73,7 @@ export function show(req, res) {
 
 // Creates a new Product in the DB
 export function create(req, res) {
-  Product.createAsync(req.body)
+  Product.create(req.body)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
 }
@@ -86,7 +83,7 @@ export function update(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Product.findByIdAsync(req.params.id)
+  Product.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(responseWithResult(res))
@@ -95,7 +92,7 @@ export function update(req, res) {
 
 // Deletes a Product from the DB
 export function destroy(req, res) {
-  Product.findByIdAsync(req.params.id)
+  Product.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
