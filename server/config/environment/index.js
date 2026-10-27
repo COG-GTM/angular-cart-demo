@@ -30,22 +30,12 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'angular-clothes-shop-secret'
+    session: process.env.SESSION_SECRET || 'angular-clothes-shop-secret'
   },
 
   // MongoDB connection options
   mongo: {
-    options: {
-      auto_reconnect: true,
-      db: {
-        safe: true
-      },
-      server: {
-        socketOptions: {
-          keepAlive: 1
-        }
-      }
-    }
+    options: {}
   }
 };
 

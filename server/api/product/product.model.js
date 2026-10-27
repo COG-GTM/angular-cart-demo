@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+var mongoose = require('mongoose');
 
 var ProductSchema = new mongoose.Schema({
   name: String,
@@ -10,5 +10,7 @@ var ProductSchema = new mongoose.Schema({
   quantity: Number,
   active: Boolean
 });
+
+require('./product.events').registerHooks(ProductSchema);
 
 export default mongoose.model('Product', ProductSchema);

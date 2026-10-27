@@ -5,29 +5,48 @@
 'use strict';
 
 import express from 'express';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
-mongoose.Promise = require('bluebird');
 import config from './config/environment';
 import http from 'http';
 
 // Connect to MongoDB
-mongoose.connect(config.mongo.uri, config.mongo.options);
-mongoose.connection.on('error', function(err) {
+function onMongoError(err) {
   console.error('MongoDB connection error: ' + err);
   process.exit(-1);
-});
+}
+mongoose.connect(config.mongo.uri, config.mongo.options).catch(onMongoError);
+mongoose.connection.on('error', onMongoError);
 
 // Populate databases with sample data
 if (config.seedDB) { require('./config/seed'); }
 
 // Setup server
 var app = express();
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      // AngularJS 1.4 and Lodash 2.4 compile expressions with Function()
+      'script-src': ["'self'", "'unsafe-eval'"],
+      // Served over plain HTTP on the intranet; do not force https subresources
+      'upgrade-insecure-requests': null
+    }
+  }
+}));
 var server = http.createServer(app);
 var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
 });
 require('./config/socketio')(socketio);
+
+// Registered before the session middleware so probes neither create sessions
+// nor wait on the session store.
+app.get('/healthz', (req, res) => {
+  var dbUp = mongoose.connection.readyState === 1;
+  res.status(dbUp ? 200 : 503).json({status: dbUp ? 'ok' : 'db-unavailable'});
+});
+
 require('./config/express')(app);
 require('./routes')(app);
 

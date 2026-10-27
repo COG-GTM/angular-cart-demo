@@ -1,8 +1,13 @@
+.git
+.github
 node_modules
+client/bower_components
+dist
 public
 .tmp
 .sass-cache
 .idea
-client/bower_components
-/server/config/local.env.js
+coverage
 npm-debug.log
+/server/config/local.env.js
+docker-compose*.yml

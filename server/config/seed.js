@@ -6,7 +6,7 @@
 'use strict';
 import Product from '../api/product/product.model';
 
-Product.find({}).removeAsync()
+Product.deleteMany({})
   .then(() => {
     Product.create( {
       name: 'Cream dress',

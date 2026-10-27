@@ -1,6 +1,7 @@
 'use strict';
 
 var app = require('../..');
+var ProductEvents = require('./product.events');
 
 import request from 'supertest';
 
@@ -131,6 +132,10 @@ describe('Product API:', function() {
   describe('DELETE /api/products/:id', function() {
 
     it('should respond with 204 on successful removal', function(done) {
+      var removed;
+      ProductEvents.once('remove', doc => {
+        removed = doc;
+      });
       request(app)
         .delete('/api/products/' + newProduct._id)
         .expect(204)
@@ -138,6 +143,7 @@ describe('Product API:', function() {
           if (err) {
             return done(err);
           }
+          removed._id.toString().should.equal(newProduct._id);
           done();
         });
     });
@@ -157,7 +163,7 @@ describe('Product API:', function() {
   });
 
   describe('GET /bleh', function() {
-    it('should respond with index.html', function() {
+    it('should respond with index.html', function(done) {
       request(app)
         .get('/bleh')
         .expect(200)
